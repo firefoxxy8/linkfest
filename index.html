@@ -1,0 +1,85 @@
+---
+title: "R and Statistics Linkfest"
+runtime: shiny
+output: html_document
+---
+
+```{r, echo=FALSE, message=FALSE}
+library(googlesheets)
+library(dplyr)
+
+sourceBook <- gs_key("1E2H979v2L_NwrxCxI3OlfreLVTJ6a77Ed3WgH6A2YbA")
+
+resourceList <- gs_read(sourceBook, ws = "Form responses 1")
+
+# Pare this down to just the ones that have been approved
+resourceList <- resourceList[!is.na(resourceList$`Approved?`),]
+
+```
+
+```{r, echo=FALSE, results='asis'}
+
+displayResource <- function(resource){
+  cat(c("<p><b><a href=\"",resource$Link,"\" target='_blank'>",resource$`Resource Name/Title`,"</a></b> (",resource$`Content Type`,")<br>"),sep="")
+  cat(c(resource$Description,"<br>"),sep="")
+  cat(c("Content Focus: ",resource$`Focus of the Content`,"<br>"),sep="")
+  if(resource$`Include Your Name as a Contributor?`=="Yes"){
+    cat(c("Contributed by: ",resource$`Your Name`),sep="")
+  }
+  cat("</p>",sep="")
+}
+
+```
+
+##{.tabset}
+Check out these R and statistics resources. To submit a resource, fill out [this Google form](https://docs.google.com/a/webanalyticsdemystified.com/forms/d/e/1FAIpQLSftDmRdGT-Ad-mgaa2rEh7yt4F6hYzDGkIuIym4lsq1Lothsw/viewform). Once approved, the resource will appear here.
+
+Oh... and...yeah... we'll be working to improve the structure and navigation of this site.
+
+### Tutorials
+
+```{r, echo=FALSE, results='asis'}
+
+resources <- resourceList[resourceList$`Resource Purpose`=="Tutorial",]
+
+for (i in 1:nrow(resources)){
+  displayResource(resources[i,])
+}
+
+```
+
+### Tips & Tricks
+
+```{r, echo=FALSE, results='asis'}
+
+resources <- resourceList[resourceList$`Resource Purpose`=="Tip/Trick",]
+
+for (i in 1:nrow(resources)){
+  displayResource(resources[i,])
+}
+
+```
+
+### Scripts and Packages
+
+```{r, echo=FALSE, results='asis'}
+
+resources <- resourceList[resourceList$`Resource Purpose`=="Useful/Usable Script/Package",]
+
+for (i in 1:nrow(resources)){
+  displayResource(resources[i,])
+}
+
+```
+
+### General Reference
+
+```{r, echo=FALSE, results='asis'}
+
+resources <- resourceList[resourceList$`Resource Purpose`=="General Reference",]
+
+for (i in 1:nrow(resources)){
+  displayResource(resources[i,])
+}
+
+```
